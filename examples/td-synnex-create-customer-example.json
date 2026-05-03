@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "https://ion.tdsynnex.com/v3/accounts/{accountId}/customers",
+    "headers": {
+      "Authorization": "Bearer {access_token}",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "companyName": "Acme Technology Solutions",
+      "email": "it@acmetechsolutions.com",
+      "phone": "+1-555-123-4567",
+      "address": {
+        "street": "123 Tech Drive",
+        "city": "Austin",
+        "state": "TX",
+        "postalCode": "78701",
+        "country": "US"
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "customerId": "cust-abc123",
+      "companyName": "Acme Technology Solutions",
+      "email": "it@acmetechsolutions.com",
+      "phone": "+1-555-123-4567",
+      "address": {
+        "street": "123 Tech Drive",
+        "city": "Austin",
+        "state": "TX",
+        "postalCode": "78701",
+        "country": "US"
+      },
+      "status": "ACTIVE",
+      "createdDate": "2026-05-03T10:00:00.000Z",
+      "modifiedDate": "2026-05-03T10:00:00.000Z"
+    }
+  }
+}

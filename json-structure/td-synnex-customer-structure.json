@@ -1,0 +1,32 @@
+{
+  "name": "Customer",
+  "description": "TD SYNNEX StreamOne end customer account",
+  "fields": [
+    {"name": "customerId", "type": "string", "description": "Unique customer identifier", "required": true},
+    {"name": "companyName", "type": "string", "description": "Company name", "required": true},
+    {"name": "email", "type": "string", "description": "Contact email", "required": true},
+    {"name": "phone", "type": "string", "description": "Contact phone", "required": false},
+    {
+      "name": "address",
+      "type": "object",
+      "description": "Physical address",
+      "required": false,
+      "fields": [
+        {"name": "street", "type": "string", "description": "Street address"},
+        {"name": "city", "type": "string", "description": "City"},
+        {"name": "state", "type": "string", "description": "State or province"},
+        {"name": "postalCode", "type": "string", "description": "Postal code"},
+        {"name": "country", "type": "string", "description": "ISO 3166-1 alpha-2 country code"}
+      ]
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "description": "Account status",
+      "required": true,
+      "enum": ["ACTIVE", "INACTIVE", "SUSPENDED"]
+    },
+    {"name": "createdDate", "type": "string", "description": "Creation timestamp", "required": false},
+    {"name": "modifiedDate", "type": "string", "description": "Last modified timestamp", "required": false}
+  ]
+}

@@ -1,0 +1,141 @@
+vocabulary:
+  name: TD SYNNEX Vocabulary
+  description: >-
+    Domain vocabulary for TD SYNNEX technology distribution services and the
+    StreamOne Ion cloud distribution API platform for MSPs and resellers.
+  url: https://www.tdsynnex.com/
+  version: '2026-05-03'
+  tags:
+    - Technology Distribution
+    - Cloud Distribution
+    - MSP
+    - Reseller
+    - StreamOne Ion
+
+terms:
+
+  - term: TD SYNNEX
+    definition: >-
+      One of the world's largest IT distributors, formed from the merger of TD SYNNEX
+      and Tech Data. Distributes technology products and services to resellers, MSPs,
+      and enterprise customers in over 100 countries.
+    type: Brand
+    tags:
+      - Company
+
+  - term: StreamOne Ion
+    definition: >-
+      TD SYNNEX's cloud distribution platform and partner API that enables resellers
+      and MSPs to manage multi-vendor cloud subscriptions, customers, orders, and
+      billing through a unified interface.
+    type: Platform
+    tags:
+      - Platform
+
+  - term: Partner
+    definition: >-
+      A TD SYNNEX reseller, managed service provider (MSP), or distributor that
+      purchases and resells technology products through the StreamOne platform.
+    type: Actor
+    tags:
+      - Business Relationship
+
+  - term: End Customer
+    definition: >-
+      The final business customer of a TD SYNNEX partner that consumes technology
+      products and cloud subscriptions purchased through StreamOne Ion.
+    type: Actor
+    tags:
+      - Business Relationship
+
+  - term: Subscription
+    definition: >-
+      A recurring access entitlement to a cloud software product (e.g., Microsoft 365,
+      Azure services). Subscriptions have quantity, billing frequency, and renewal dates.
+    type: Resource
+    tags:
+      - Cloud
+      - Billing
+
+  - term: SKU
+    definition: >-
+      Stock Keeping Unit. A unique identifier for a specific technology product
+      in the TD SYNNEX catalog, tied to a specific vendor and configuration.
+    type: Identifier
+    tags:
+      - Product
+
+  - term: MSP
+    definition: >-
+      Managed Service Provider. A partner business that provides ongoing IT
+      management and services to end customers, often reselling cloud subscriptions
+      through TD SYNNEX StreamOne Ion.
+    type: Partner Type
+    tags:
+      - Business Model
+
+  - term: Provisioning
+    definition: >-
+      The process of setting up and configuring a cloud product for an end customer
+      after an order is placed. Provisioning templates define vendor-specific requirements.
+    type: Process
+    tags:
+      - Fulfillment
+
+  - term: Cloud Profile
+    definition: >-
+      A record linking an end customer to their account with a specific cloud provider
+      (e.g., Microsoft Azure tenant, AWS account).
+    type: Resource
+    tags:
+      - Cloud
+      - Account Management
+
+  - term: Shopping Cart
+    definition: >-
+      A temporary container for product selections before order submission in the
+      StreamOne Ion platform, enabling staged order preparation.
+    type: Resource
+    tags:
+      - Order Management
+
+  - term: Account ID
+    definition: >-
+      The unique identifier for a TD SYNNEX partner account, required as a path
+      parameter in all StreamOne Ion API v3 resource paths.
+    type: Identifier
+    tags:
+      - Authentication
+
+  - term: Vertical
+    definition: >-
+      An industry or market segment category (e.g., Healthcare, Financial Services,
+      Education) used to organize products in the StreamOne catalog.
+    type: Classification
+    tags:
+      - Product Catalog
+
+  - term: Refresh Token
+    definition: >-
+      A long-lived OAuth 2.0 token used to obtain new access tokens for StreamOne
+      Ion API authentication without re-authorization.
+    type: Authentication
+    tags:
+      - Security
+
+  - term: Auto Renewal
+    definition: >-
+      A subscription setting that automatically renews a cloud subscription at the
+      end of its term without manual intervention.
+    type: Subscription Setting
+    tags:
+      - Billing
+      - Subscription Management
+
+  - term: Digital Bridge
+    definition: >-
+      TD SYNNEX's partner integration platform offering pre-built connectors and
+      enterprise-grade APIs for surfacing live pricing, inventory, and order workflows.
+    type: Platform
+    tags:
+      - Integration

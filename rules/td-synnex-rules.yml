@@ -1,0 +1,111 @@
+extends: spectral:oas
+rules:
+  tdsynnex-path-versioning:
+    description: All API paths should be versioned with /v3/ prefix
+    message: "Path '{{property}}' should be versioned with /v3/ prefix (or /oauth/ for auth)"
+    severity: warn
+    given: "$.paths[*]~"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^(/v3/|/oauth/)"
+
+  tdsynnex-path-account-id:
+    description: Partner resource paths should include {accountId} parameter
+    message: "Partner resource path '{{property}}' should include {accountId}"
+    severity: warn
+    given: "$.paths[/v3/*]~"
+    then:
+      function: pattern
+      functionOptions:
+        match: ".*\\{accountId\\}.*"
+
+  tdsynnex-operation-ids-required:
+    description: All operations must have operationId defined
+    message: "Operation is missing operationId"
+    severity: error
+    given: "$.paths[*][get,post,put,delete,patch]"
+    then:
+      field: operationId
+      function: defined
+
+  tdsynnex-operation-ids-camelcase:
+    description: operationId values should use camelCase
+    message: "operationId '{{value}}' should use camelCase"
+    severity: warn
+    given: "$.paths[*][get,post,put,delete,patch].operationId"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^[a-z][a-zA-Z0-9]*$"
+
+  tdsynnex-tags-defined:
+    description: All operations should be tagged
+    message: "Operation is missing tags"
+    severity: warn
+    given: "$.paths[*][get,post,put,delete,patch]"
+    then:
+      field: tags
+      function: defined
+
+  tdsynnex-security-defined:
+    description: Operations (except token endpoint) should require OAuth2
+    message: "Operation should define security requirements"
+    severity: warn
+    given: "$.paths[/v3/*][get,post,put,delete,patch]"
+    then:
+      function: defined
+
+  tdsynnex-responses-success:
+    description: GET operations should define a 200 success response
+    message: "GET operation is missing 200 response"
+    severity: error
+    given: "$.paths[*].get.responses"
+    then:
+      field: "200"
+      function: defined
+
+  tdsynnex-post-responses-201:
+    description: POST create operations should return 201 Created
+    message: "POST create operation should return 201"
+    severity: warn
+    given: "$.paths[/v3/accounts/{accountId}/customers,/v3/accounts/{accountId}/orders,/v3/accounts/{accountId}/customers/{customerId}/carts].post.responses"
+    then:
+      field: "201"
+      function: defined
+
+  tdsynnex-error-401:
+    description: Authenticated operations should define 401 Unauthorized
+    message: "Operation is missing 401 Unauthorized response"
+    severity: warn
+    given: "$.paths[/v3/*][get,post,put,delete,patch].responses"
+    then:
+      field: "401"
+      function: defined
+
+  tdsynnex-summary-title-case:
+    description: Operation summaries should use Title Case
+    message: "Summary '{{value}}' should use Title Case"
+    severity: warn
+    given: "$.paths[*][get,post,put,delete,patch].summary"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^[A-Z]"
+
+  tdsynnex-request-body-content-type:
+    description: POST and PUT operations should specify application/json content type
+    message: "POST/PUT operation should specify application/json request body content type"
+    severity: warn
+    given: "$.paths[*][post,put].requestBody.content"
+    then:
+      field: "application/json"
+      function: defined
+
+  tdsynnex-pagination-parameters:
+    description: List operations should support pagination parameters
+    message: "List operation should support page and pageSize parameters"
+    severity: info
+    given: "$.paths[*].get"
+    then:
+      function: defined

@@ -1,0 +1,53 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "https://ion.tdsynnex.com/v3/accounts/{accountId}/orders",
+    "headers": {
+      "Authorization": "Bearer {access_token}",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "customerId": "cust-abc123",
+      "items": [
+        {
+          "productId": "ms-365-business-premium",
+          "quantity": 25
+        },
+        {
+          "productId": "ms-azure-defender-endpoint",
+          "quantity": 25
+        }
+      ],
+      "notes": "Annual renewal for Acme Technology Solutions"
+    }
+  },
+  "response": {
+    "status": 201,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "orderId": "ord-xyz789",
+      "customerId": "cust-abc123",
+      "status": "PENDING",
+      "items": [
+        {
+          "productId": "ms-365-business-premium",
+          "quantity": 25,
+          "unitPrice": 22.00,
+          "totalPrice": 550.00
+        },
+        {
+          "productId": "ms-azure-defender-endpoint",
+          "quantity": 25,
+          "unitPrice": 5.20,
+          "totalPrice": 130.00
+        }
+      ],
+      "totalAmount": 680.00,
+      "currency": "USD",
+      "createdDate": "2026-05-03T10:15:00.000Z",
+      "modifiedDate": "2026-05-03T10:15:00.000Z"
+    }
+  }
+}

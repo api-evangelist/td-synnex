@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/td-synnex/main/json-schema/td-synnex-customer-schema.json",
+  "title": "TD SYNNEX StreamOne Customer",
+  "description": "Schema for an end customer account in the TD SYNNEX StreamOne Ion cloud distribution platform.",
+  "type": "object",
+  "required": ["customerId", "companyName", "email", "status"],
+  "properties": {
+    "customerId": {
+      "type": "string",
+      "description": "Unique customer identifier assigned by TD SYNNEX"
+    },
+    "companyName": {
+      "type": "string",
+      "description": "Customer's company name"
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "Primary contact email address"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Primary contact phone number"
+    },
+    "address": {
+      "$ref": "#/$defs/Address"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["ACTIVE", "INACTIVE", "SUSPENDED"],
+      "description": "Current account status"
+    },
+    "cloudProfiles": {
+      "type": "array",
+      "description": "Linked cloud provider accounts",
+      "items": {
+        "$ref": "#/$defs/CloudProfile"
+      }
+    },
+    "createdDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Account creation timestamp"
+    },
+    "modifiedDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last modification timestamp"
+    }
+  },
+  "$defs": {
+    "Address": {
+      "type": "object",
+      "description": "Physical address",
+      "properties": {
+        "street": {
+          "type": "string",
+          "description": "Street address"
+        },
+        "city": {
+          "type": "string",
+          "description": "City name"
+        },
+        "state": {
+          "type": "string",
+          "description": "State or province code"
+        },
+        "postalCode": {
+          "type": "string",
+          "description": "Postal or zip code"
+        },
+        "country": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 2,
+          "description": "ISO 3166-1 alpha-2 country code"
+        }
+      }
+    },
+    "CloudProfile": {
+      "type": "object",
+      "description": "A linked cloud provider account profile",
+      "properties": {
+        "profileId": {
+          "type": "string"
+        },
+        "vendor": {
+          "type": "string",
+          "description": "Cloud vendor name (e.g., Microsoft, AWS, Google)"
+        },
+        "tenantId": {
+          "type": "string",
+          "description": "Cloud tenant identifier"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["ACTIVE", "INACTIVE", "PENDING"]
+        }
+      }
+    }
+  }
+}
