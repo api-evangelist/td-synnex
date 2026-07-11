@@ -1,0 +1,18 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/td-synnex-streamone-ion-openapi.yml
+summary:
+  types:
+  - oauth2
+  oauth2_flows:
+  - clientCredentials
+schemes:
+- name: OAuth2
+  type: oauth2
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://ion.tdsynnex.com/oauth/token
+    scopes: 2
+  description: TD SYNNEX StreamOne Ion uses OAuth 2.0 with refresh token flow
+  sources:
+  - openapi/td-synnex-streamone-ion-openapi.yml
