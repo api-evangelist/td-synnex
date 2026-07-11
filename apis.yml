@@ -48,6 +48,10 @@ apis:
       - FN: TD SYNNEX Support
         url: https://www.tdsynnex.com/ion/api/
 common:
+  - type: Authentication
+    url: authentication/td-synnex-authentication.yml
+  - type: OAuthScopes
+    url: scopes/td-synnex-scopes.yml
   - type: LinkedIn
     url: https://www.linkedin.com/company/tdsynnex
   - type: Website
