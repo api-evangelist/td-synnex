@@ -48,6 +48,8 @@ apis:
       - FN: TD SYNNEX Support
         url: https://www.tdsynnex.com/ion/api/
 common:
+  - type: AgenticAccess
+    url: agentic-access/td-synnex-agentic-access.yml
   - type: DomainSecurity
     url: security/td-synnex-domain-security.yml
   - type: Authentication
