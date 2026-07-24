@@ -1,0 +1,112 @@
+openapi: 3.0.3
+info:
+  title: TD SYNNEX StreamOne Ion Partner Authentication Provisioning API
+  description: The StreamOne Ion Partner API provides partners with programmatic access to TD SYNNEX cloud distribution services. Partners can manage end customers, browse product catalogs, create and manage orders, track subscriptions, manage shopping carts, and access business intelligence reports through a unified REST interface supporting multiple cloud vendors. The API enables MSPs, resellers, and technology partners to automate their cloud distribution workflows.
+  version: '3'
+  contact:
+    name: TD SYNNEX StreamOne Support
+    url: https://www.tdsynnex.com/ion/api/
+servers:
+- url: https://ion.tdsynnex.com
+  description: TD SYNNEX StreamOne Ion Production API
+security:
+- OAuth2: []
+tags:
+- name: Provisioning
+  description: Vendor provisioning template management
+paths:
+  /v3/accounts/{accountId}/provisioningInfo:
+    get:
+      operationId: getProvisioningInfo
+      summary: Get Provisioning Info
+      description: Get vendor-specific provisioning configuration templates. Use either the vendor or templateId query parameter.
+      tags:
+      - Provisioning
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      - name: vendor
+        in: query
+        description: Vendor name to retrieve provisioning templates for
+        schema:
+          type: string
+      - name: templateId
+        in: query
+        description: Specific provisioning template ID
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Provisioning templates
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProvisioningTemplate'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    ProvisioningTemplate:
+      type: object
+      description: A vendor-specific provisioning configuration template
+      properties:
+        templateId:
+          type: string
+        vendor:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        fields:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              type:
+                type: string
+              required:
+                type: boolean
+              description:
+                type: string
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: array
+          items:
+            type: string
+  responses:
+    Unauthorized:
+      description: Unauthorized - Valid OAuth 2.0 token required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    AccountId:
+      name: accountId
+      in: path
+      required: true
+      description: Partner account identifier
+      schema:
+        type: string
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: TD SYNNEX StreamOne Ion uses OAuth 2.0 with refresh token flow
+      flows:
+        clientCredentials:
+          tokenUrl: https://ion.tdsynnex.com/oauth/token
+          scopes:
+            read: Read access to partner resources
+            write: Write access to create and update resources

@@ -1,0 +1,279 @@
+openapi: 3.0.3
+info:
+  title: TD SYNNEX StreamOne Ion Partner Authentication Carts API
+  description: The StreamOne Ion Partner API provides partners with programmatic access to TD SYNNEX cloud distribution services. Partners can manage end customers, browse product catalogs, create and manage orders, track subscriptions, manage shopping carts, and access business intelligence reports through a unified REST interface supporting multiple cloud vendors. The API enables MSPs, resellers, and technology partners to automate their cloud distribution workflows.
+  version: '3'
+  contact:
+    name: TD SYNNEX StreamOne Support
+    url: https://www.tdsynnex.com/ion/api/
+servers:
+- url: https://ion.tdsynnex.com
+  description: TD SYNNEX StreamOne Ion Production API
+security:
+- OAuth2: []
+tags:
+- name: Carts
+  description: Shopping cart management
+paths:
+  /v3/accounts/{accountId}/customers/{customerId}/carts:
+    get:
+      operationId: listCarts
+      summary: List Carts
+      description: List all shopping carts for a specific customer.
+      tags:
+      - Carts
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      - $ref: '#/components/parameters/CustomerId'
+      responses:
+        '200':
+          description: List of shopping carts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Cart'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createCart
+      summary: Create Cart
+      description: Create a new shopping cart for a customer.
+      tags:
+      - Carts
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      - $ref: '#/components/parameters/CustomerId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartRequest'
+      responses:
+        '201':
+          description: Cart created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v3/accounts/{accountId}/customers/{customerId}/carts/{cartId}:
+    get:
+      operationId: getCart
+      summary: Get Cart
+      description: Retrieve a specific shopping cart.
+      tags:
+      - Carts
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      - $ref: '#/components/parameters/CustomerId'
+      - $ref: '#/components/parameters/CartId'
+      responses:
+        '200':
+          description: Cart details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    put:
+      operationId: updateCart
+      summary: Update Cart
+      description: Update an existing shopping cart.
+      tags:
+      - Carts
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      - $ref: '#/components/parameters/CustomerId'
+      - $ref: '#/components/parameters/CartId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartRequest'
+      responses:
+        '200':
+          description: Cart updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v3/accounts/{accountId}/customers/{customerId}/carts/{cartId}/checkout:
+    post:
+      operationId: checkoutCart
+      summary: Checkout Cart
+      description: Process the shopping cart and create an order from its contents.
+      tags:
+      - Carts
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      - $ref: '#/components/parameters/CustomerId'
+      - $ref: '#/components/parameters/CartId'
+      responses:
+        '200':
+          description: Checkout successful, order created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    Order:
+      type: object
+      description: A technology product order
+      properties:
+        orderId:
+          type: string
+        customerId:
+          type: string
+        status:
+          type: string
+          enum:
+          - PENDING
+          - PROCESSING
+          - COMPLETED
+          - CANCELLED
+          - FAILED
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+        totalAmount:
+          type: number
+          format: double
+        currency:
+          type: string
+        createdDate:
+          type: string
+          format: date-time
+        modifiedDate:
+          type: string
+          format: date-time
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: array
+          items:
+            type: string
+    OrderItem:
+      type: object
+      properties:
+        productId:
+          type: string
+        quantity:
+          type: integer
+        unitPrice:
+          type: number
+          format: double
+        totalPrice:
+          type: number
+          format: double
+    Cart:
+      type: object
+      description: A shopping cart for order preparation
+      properties:
+        cartId:
+          type: string
+        customerId:
+          type: string
+        status:
+          type: string
+          enum:
+          - OPEN
+          - CHECKED_OUT
+          - ABANDONED
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CartItem'
+        totalAmount:
+          type: number
+          format: double
+        createdDate:
+          type: string
+          format: date-time
+    CartItem:
+      type: object
+      properties:
+        itemId:
+          type: string
+        productId:
+          type: string
+        productName:
+          type: string
+        quantity:
+          type: integer
+        unitPrice:
+          type: number
+          format: double
+        totalPrice:
+          type: number
+          format: double
+    CartRequest:
+      type: object
+      properties:
+        notes:
+          type: string
+  responses:
+    BadRequest:
+      description: Bad Request - Invalid request parameters or body
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized - Valid OAuth 2.0 token required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    CartId:
+      name: cartId
+      in: path
+      required: true
+      description: Shopping cart identifier
+      schema:
+        type: string
+    CustomerId:
+      name: customerId
+      in: path
+      required: true
+      description: End customer identifier
+      schema:
+        type: string
+    AccountId:
+      name: accountId
+      in: path
+      required: true
+      description: Partner account identifier
+      schema:
+        type: string
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: TD SYNNEX StreamOne Ion uses OAuth 2.0 with refresh token flow
+      flows:
+        clientCredentials:
+          tokenUrl: https://ion.tdsynnex.com/oauth/token
+          scopes:
+            read: Read access to partner resources
+            write: Write access to create and update resources

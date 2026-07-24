@@ -1,0 +1,105 @@
+openapi: 3.0.3
+info:
+  title: TD SYNNEX StreamOne Ion Partner Authentication API
+  description: The StreamOne Ion Partner API provides partners with programmatic access to TD SYNNEX cloud distribution services. Partners can manage end customers, browse product catalogs, create and manage orders, track subscriptions, manage shopping carts, and access business intelligence reports through a unified REST interface supporting multiple cloud vendors. The API enables MSPs, resellers, and technology partners to automate their cloud distribution workflows.
+  version: '3'
+  contact:
+    name: TD SYNNEX StreamOne Support
+    url: https://www.tdsynnex.com/ion/api/
+servers:
+- url: https://ion.tdsynnex.com
+  description: TD SYNNEX StreamOne Ion Production API
+security:
+- OAuth2: []
+tags:
+- name: Authentication
+  description: OAuth 2.0 token management
+paths:
+  /oauth/token:
+    post:
+      operationId: getAccessToken
+      summary: Get Access Token
+      description: Acquire an OAuth 2.0 access token using a refresh token. Used to authenticate all subsequent API requests.
+      tags:
+      - Authentication
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+              - grant_type
+              - refresh_token
+              properties:
+                grant_type:
+                  type: string
+                  enum:
+                  - refresh_token
+                  description: OAuth 2.0 grant type
+                refresh_token:
+                  type: string
+                  description: Valid refresh token from initial authorization
+      responses:
+        '200':
+          description: Access token response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    TokenResponse:
+      type: object
+      description: OAuth 2.0 token response
+      properties:
+        access_token:
+          type: string
+          description: Bearer access token for API authentication
+        token_type:
+          type: string
+          example: Bearer
+        expires_in:
+          type: integer
+          description: Token expiration time in seconds
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: array
+          items:
+            type: string
+  responses:
+    BadRequest:
+      description: Bad Request - Invalid request parameters or body
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized - Valid OAuth 2.0 token required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: TD SYNNEX StreamOne Ion uses OAuth 2.0 with refresh token flow
+      flows:
+        clientCredentials:
+          tokenUrl: https://ion.tdsynnex.com/oauth/token
+          scopes:
+            read: Read access to partner resources
+            write: Write access to create and update resources

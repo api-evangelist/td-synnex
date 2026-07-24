@@ -1,0 +1,167 @@
+openapi: 3.0.3
+info:
+  title: TD SYNNEX StreamOne Ion Partner Authentication Subscriptions API
+  description: The StreamOne Ion Partner API provides partners with programmatic access to TD SYNNEX cloud distribution services. Partners can manage end customers, browse product catalogs, create and manage orders, track subscriptions, manage shopping carts, and access business intelligence reports through a unified REST interface supporting multiple cloud vendors. The API enables MSPs, resellers, and technology partners to automate their cloud distribution workflows.
+  version: '3'
+  contact:
+    name: TD SYNNEX StreamOne Support
+    url: https://www.tdsynnex.com/ion/api/
+servers:
+- url: https://ion.tdsynnex.com
+  description: TD SYNNEX StreamOne Ion Production API
+security:
+- OAuth2: []
+tags:
+- name: Subscriptions
+  description: Cloud subscription management
+paths:
+  /v3/accounts/{accountId}/customers/{customerId}/subscriptions:
+    get:
+      operationId: listCustomerSubscriptions
+      summary: List Customer Subscriptions
+      description: List all cloud software subscriptions for a specific customer.
+      tags:
+      - Subscriptions
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      - $ref: '#/components/parameters/CustomerId'
+      - name: vendor
+        in: query
+        description: Filter subscriptions by vendor
+        schema:
+          type: string
+      - name: status
+        in: query
+        description: Filter by subscription status
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of customer subscriptions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subscription'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v3/accounts/{accountId}/customers/{customerId}/subscriptions/{subscriptionId}:
+    get:
+      operationId: getSubscription
+      summary: Get Subscription
+      description: Retrieve details for a specific customer subscription.
+      tags:
+      - Subscriptions
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      - $ref: '#/components/parameters/CustomerId'
+      - name: subscriptionId
+        in: path
+        required: true
+        description: Unique subscription identifier
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Subscription details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    Subscription:
+      type: object
+      description: A cloud software subscription
+      properties:
+        subscriptionId:
+          type: string
+        customerId:
+          type: string
+        productId:
+          type: string
+        productName:
+          type: string
+        vendor:
+          type: string
+        quantity:
+          type: integer
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - SUSPENDED
+          - CANCELLED
+          - EXPIRED
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        renewalDate:
+          type: string
+          format: date
+        autoRenew:
+          type: boolean
+        monthlyAmount:
+          type: number
+          format: double
+        currency:
+          type: string
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: array
+          items:
+            type: string
+  responses:
+    NotFound:
+      description: Not Found - Requested resource does not exist
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized - Valid OAuth 2.0 token required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    CustomerId:
+      name: customerId
+      in: path
+      required: true
+      description: End customer identifier
+      schema:
+        type: string
+    AccountId:
+      name: accountId
+      in: path
+      required: true
+      description: Partner account identifier
+      schema:
+        type: string
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: TD SYNNEX StreamOne Ion uses OAuth 2.0 with refresh token flow
+      flows:
+        clientCredentials:
+          tokenUrl: https://ion.tdsynnex.com/oauth/token
+          scopes:
+            read: Read access to partner resources
+            write: Write access to create and update resources
