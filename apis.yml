@@ -7,9 +7,22 @@ description: >-
   cloud subscriptions, customers, orders, and billing through a unified interface supporting multiple cloud vendors.
   Named NVIDIA EMEA Distributor of the Year 2026.
 type: Index
+accessModel:
+  pricing: enterprise
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Enterprise · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
 position: Consumer
 access: 3rd-Party
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/td-synnex.png
 tags:
   - Technology Distribution
   - IT Distribution
@@ -23,30 +36,126 @@ modified: '2026-05-19'
 url: https://raw.githubusercontent.com/api-evangelist/td-synnex/refs/heads/main/apis.yml
 specificationVersion: '0.19'
 apis:
-  - aid: td-synnex:streamone-ion
-    name: TD SYNNEX StreamOne Ion API
-    description: >-
-      The StreamOne Ion Partner API provides partners with programmatic access to TD SYNNEX cloud distribution services.
-      Enables management of end customers, product catalogs, orders, subscriptions, shopping carts, and reporting
-      through a unified REST interface supporting multiple cloud vendors. Uses OAuth 2.0 authentication with refresh
-      token flow.
-    humanURL: https://docs.streamone.cloud/
-    baseURL: https://ion.tdsynnex.com
-    tags:
-      - Cloud Distribution
-      - Subscription Management
-      - Order Management
-      - Customer Management
-      - Reporting
-    properties:
-      - type: Documentation
-        url: https://docs.streamone.cloud/
-      - type: OpenAPI
-        url: >-
-          https://raw.githubusercontent.com/api-evangelist/td-synnex/refs/heads/main/openapi/td-synnex-streamone-ion-openapi.yml
-    contact:
-      - FN: TD SYNNEX Support
-        url: https://www.tdsynnex.com/ion/api/
+- aid: td-synnex:td-synnex-authentication-api
+  name: TD SYNNEX Authentication API
+  description: OAuth 2.0 token management
+  humanURL: https://docs.streamone.cloud/
+  baseURL: https://ion.tdsynnex.com
+  tags:
+  - Authentication
+  properties:
+  - type: OpenAPI
+    url: openapi/td-synnex-authentication-api-openapi.yml
+  - type: Documentation
+    url: https://docs.streamone.cloud/
+- aid: td-synnex:td-synnex-cart-items-api
+  name: TD SYNNEX Cart Items API
+  description: Shopping cart item management
+  humanURL: https://docs.streamone.cloud/
+  baseURL: https://ion.tdsynnex.com
+  tags:
+  - Cart Items
+  properties:
+  - type: OpenAPI
+    url: openapi/td-synnex-cart-items-api-openapi.yml
+  - type: Documentation
+    url: https://docs.streamone.cloud/
+- aid: td-synnex:td-synnex-carts-api
+  name: TD SYNNEX Carts API
+  description: Shopping cart management
+  humanURL: https://docs.streamone.cloud/
+  baseURL: https://ion.tdsynnex.com
+  tags:
+  - Carts
+  properties:
+  - type: OpenAPI
+    url: openapi/td-synnex-carts-api-openapi.yml
+  - type: Documentation
+    url: https://docs.streamone.cloud/
+- aid: td-synnex:td-synnex-cloud-providers-api
+  name: TD SYNNEX Cloud Providers API
+  description: Customer cloud provider account linking
+  humanURL: https://docs.streamone.cloud/
+  baseURL: https://ion.tdsynnex.com
+  tags:
+  - Cloud Providers
+  properties:
+  - type: OpenAPI
+    url: openapi/td-synnex-cloud-providers-api-openapi.yml
+  - type: Documentation
+    url: https://docs.streamone.cloud/
+- aid: td-synnex:td-synnex-customers-api
+  name: TD SYNNEX Customers API
+  description: End customer account management
+  humanURL: https://docs.streamone.cloud/
+  baseURL: https://ion.tdsynnex.com
+  tags:
+  - Customers
+  properties:
+  - type: OpenAPI
+    url: openapi/td-synnex-customers-api-openapi.yml
+  - type: Documentation
+    url: https://docs.streamone.cloud/
+- aid: td-synnex:td-synnex-orders-api
+  name: TD SYNNEX Orders API
+  description: Order creation and management
+  humanURL: https://docs.streamone.cloud/
+  baseURL: https://ion.tdsynnex.com
+  tags:
+  - Orders
+  properties:
+  - type: OpenAPI
+    url: openapi/td-synnex-orders-api-openapi.yml
+  - type: Documentation
+    url: https://docs.streamone.cloud/
+- aid: td-synnex:td-synnex-products-api
+  name: TD SYNNEX Products API
+  description: Technology product catalog browsing
+  humanURL: https://docs.streamone.cloud/
+  baseURL: https://ion.tdsynnex.com
+  tags:
+  - Products
+  properties:
+  - type: OpenAPI
+    url: openapi/td-synnex-products-api-openapi.yml
+  - type: Documentation
+    url: https://docs.streamone.cloud/
+- aid: td-synnex:td-synnex-provisioning-api
+  name: TD SYNNEX Provisioning API
+  description: Vendor provisioning template management
+  humanURL: https://docs.streamone.cloud/
+  baseURL: https://ion.tdsynnex.com
+  tags:
+  - Provisioning
+  properties:
+  - type: OpenAPI
+    url: openapi/td-synnex-provisioning-api-openapi.yml
+  - type: Documentation
+    url: https://docs.streamone.cloud/
+- aid: td-synnex:td-synnex-reports-api
+  name: TD SYNNEX Reports API
+  description: Business intelligence and reporting
+  humanURL: https://docs.streamone.cloud/
+  baseURL: https://ion.tdsynnex.com
+  tags:
+  - Reports
+  properties:
+  - type: OpenAPI
+    url: openapi/td-synnex-reports-api-openapi.yml
+  - type: Documentation
+    url: https://docs.streamone.cloud/
+- aid: td-synnex:td-synnex-subscriptions-api
+  name: TD SYNNEX Subscriptions API
+  description: Cloud subscription management
+  humanURL: https://docs.streamone.cloud/
+  baseURL: https://ion.tdsynnex.com
+  tags:
+  - Subscriptions
+  properties:
+  - type: OpenAPI
+    url: openapi/td-synnex-subscriptions-api-openapi.yml
+  - type: Documentation
+    url: https://docs.streamone.cloud/
 common:
   - type: AgenticAccess
     url: agentic-access/td-synnex-agentic-access.yml
