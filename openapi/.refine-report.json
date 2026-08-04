@@ -1,0 +1,32 @@
+{
+  "provider": "td-synnex",
+  "sources": [
+    "td-synnex-authentication-api-openapi.yml",
+    "td-synnex-cart-items-api-openapi.yml",
+    "td-synnex-carts-api-openapi.yml",
+    "td-synnex-cloud-providers-api-openapi.yml",
+    "td-synnex-customers-api-openapi.yml",
+    "td-synnex-orders-api-openapi.yml",
+    "td-synnex-products-api-openapi.yml",
+    "td-synnex-provisioning-api-openapi.yml",
+    "td-synnex-reports-api-openapi.yml",
+    "td-synnex-subscriptions-api-openapi.yml"
+  ],
+  "outputs": [
+    "td-synnex-authentication-api-openapi.yml",
+    "td-synnex-cart-items-api-openapi.yml",
+    "td-synnex-carts-api-openapi.yml",
+    "td-synnex-cloud-providers-api-openapi.yml",
+    "td-synnex-customers-api-openapi.yml",
+    "td-synnex-orders-api-openapi.yml",
+    "td-synnex-products-api-openapi.yml",
+    "td-synnex-provisioning-api-openapi.yml",
+    "td-synnex-reports-api-openapi.yml",
+    "td-synnex-subscriptions-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

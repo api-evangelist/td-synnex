@@ -1,0 +1,1379 @@
+openapi: 3.0.3
+info:
+  title: TD SYNNEX StreamOne Ion Partner API
+  description: >-
+    The StreamOne Ion Partner API provides partners with programmatic access to
+    TD SYNNEX cloud distribution services. Partners can manage end customers,
+    browse product catalogs, create and manage orders, track subscriptions,
+    manage shopping carts, and access business intelligence reports through a
+    unified REST interface supporting multiple cloud vendors. The API enables
+    MSPs, resellers, and technology partners to automate their cloud distribution
+    workflows.
+  version: '3'
+  contact:
+    name: TD SYNNEX StreamOne Support
+    url: https://www.tdsynnex.com/ion/api/
+servers:
+  - url: https://ion.tdsynnex.com
+    description: TD SYNNEX StreamOne Ion Production API
+security:
+  - OAuth2: []
+tags:
+  - name: Authentication
+    description: OAuth 2.0 token management
+  - name: Customers
+    description: End customer account management
+  - name: Products
+    description: Technology product catalog browsing
+  - name: Orders
+    description: Order creation and management
+  - name: Subscriptions
+    description: Cloud subscription management
+  - name: Carts
+    description: Shopping cart management
+  - name: Cart Items
+    description: Shopping cart item management
+  - name: Cloud Providers
+    description: Customer cloud provider account linking
+  - name: Provisioning
+    description: Vendor provisioning template management
+  - name: Reports
+    description: Business intelligence and reporting
+paths:
+  /oauth/token:
+    post:
+      operationId: getAccessToken
+      summary: Get Access Token
+      description: >-
+        Acquire an OAuth 2.0 access token using a refresh token. Used to
+        authenticate all subsequent API requests.
+      tags:
+        - Authentication
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - grant_type
+                - refresh_token
+              properties:
+                grant_type:
+                  type: string
+                  enum:
+                    - refresh_token
+                  description: OAuth 2.0 grant type
+                refresh_token:
+                  type: string
+                  description: Valid refresh token from initial authorization
+      responses:
+        '200':
+          description: Access token response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v3/accounts/{accountId}/customers:
+    get:
+      operationId: listCustomers
+      summary: List Customers
+      description: List all end customers associated with the partner account.
+      tags:
+        - Customers
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - name: page
+          in: query
+          description: Page number for pagination
+          schema:
+            type: integer
+            default: 1
+        - name: pageSize
+          in: query
+          description: Number of results per page
+          schema:
+            type: integer
+            default: 25
+      responses:
+        '200':
+          description: List of customers
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  customers:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Customer'
+                  totalCount:
+                    type: integer
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createCustomer
+      summary: Create Customer
+      description: Add a new end customer to the platform.
+      tags:
+        - Customers
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+      requestBody:
+        required: true
+        description: New customer details
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerRequest'
+      responses:
+        '201':
+          description: Customer created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v3/accounts/{accountId}/customers/{customerId}:
+    get:
+      operationId: getCustomer
+      summary: Get Customer
+      description: Retrieve details for a specific end customer.
+      tags:
+        - Customers
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/CustomerId'
+      responses:
+        '200':
+          description: Customer details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: updateCustomer
+      summary: Update Customer
+      description: Modify an existing end customer's information.
+      tags:
+        - Customers
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/CustomerId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerRequest'
+      responses:
+        '200':
+          description: Customer updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v3/accounts/{accountId}/customers/{customerId}/cloudProfiles:
+    get:
+      operationId: getCustomerCloudProfiles
+      summary: Get Customer Cloud Profiles
+      description: Fetch linked cloud provider profile details for a specific customer.
+      tags:
+        - Customers
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/CustomerId'
+      responses:
+        '200':
+          description: Customer cloud profiles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CloudProfile'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v3/accounts/{accountId}/products:
+    get:
+      operationId: listProducts
+      summary: List Products
+      description: Retrieve the list of technology products available through TD SYNNEX.
+      tags:
+        - Products
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - name: vendor
+          in: query
+          description: Filter by vendor name
+          schema:
+            type: string
+        - name: category
+          in: query
+          description: Filter by product category
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of available products
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  products:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Product'
+                  totalCount:
+                    type: integer
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v3/accounts/{accountId}/products/{productId}:
+    get:
+      operationId: getProduct
+      summary: Get Product
+      description: Access detailed information for a specific technology product.
+      tags:
+        - Products
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - name: productId
+          in: path
+          required: true
+          description: Unique product identifier
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Product details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v3/accounts/{accountId}/products/verticals:
+    post:
+      operationId: listProductVerticals
+      summary: List Product Verticals
+      description: List product verticals (industry/market segments) available in the catalog.
+      tags:
+        - Products
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+      responses:
+        '200':
+          description: List of product verticals
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v3/accounts/{accountId}/products/categories:
+    put:
+      operationId: listProductCategories
+      summary: List Product Categories
+      description: List product categories available in the catalog.
+      tags:
+        - Products
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+      responses:
+        '200':
+          description: List of product categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v3/accounts/{accountId}/orders:
+    get:
+      operationId: listOrders
+      summary: List Orders
+      description: Retrieve all orders associated with the partner account.
+      tags:
+        - Orders
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - name: status
+          in: query
+          description: Filter by order status
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of orders
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  orders:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Order'
+                  totalCount:
+                    type: integer
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createOrder
+      summary: Create Order
+      description: Create a new technology product order.
+      tags:
+        - Orders
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderRequest'
+      responses:
+        '201':
+          description: Order created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v3/accounts/{accountId}/customers/{customerId}/orders:
+    get:
+      operationId: listCustomerOrders
+      summary: List Customer Orders
+      description: Fetch all orders for a specific customer.
+      tags:
+        - Orders
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/CustomerId'
+      responses:
+        '200':
+          description: List of customer orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v3/accounts/{accountId}/orders/{orderId}:
+    get:
+      operationId: getOrder
+      summary: Get Order
+      description: Retrieve details for a specific order.
+      tags:
+        - Orders
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/OrderId'
+      responses:
+        '200':
+          description: Order details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: updateOrder
+      summary: Update Order
+      description: Modify an existing order (e.g., update license counts, renewal settings).
+      tags:
+        - Orders
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/OrderId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderRequest'
+      responses:
+        '200':
+          description: Order updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    delete:
+      operationId: cancelOrder
+      summary: Cancel Order
+      description: Cancel a pending order.
+      tags:
+        - Orders
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/OrderId'
+      responses:
+        '200':
+          description: Order cancelled
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v3/accounts/{accountId}/customers/{customerId}/subscriptions:
+    get:
+      operationId: listCustomerSubscriptions
+      summary: List Customer Subscriptions
+      description: List all cloud software subscriptions for a specific customer.
+      tags:
+        - Subscriptions
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/CustomerId'
+        - name: vendor
+          in: query
+          description: Filter subscriptions by vendor
+          schema:
+            type: string
+        - name: status
+          in: query
+          description: Filter by subscription status
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of customer subscriptions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subscription'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v3/accounts/{accountId}/customers/{customerId}/subscriptions/{subscriptionId}:
+    get:
+      operationId: getSubscription
+      summary: Get Subscription
+      description: Retrieve details for a specific customer subscription.
+      tags:
+        - Subscriptions
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/CustomerId'
+        - name: subscriptionId
+          in: path
+          required: true
+          description: Unique subscription identifier
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Subscription details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v3/accounts/{accountId}/customers/{customerId}/carts:
+    get:
+      operationId: listCarts
+      summary: List Carts
+      description: List all shopping carts for a specific customer.
+      tags:
+        - Carts
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/CustomerId'
+      responses:
+        '200':
+          description: List of shopping carts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Cart'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createCart
+      summary: Create Cart
+      description: Create a new shopping cart for a customer.
+      tags:
+        - Carts
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/CustomerId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartRequest'
+      responses:
+        '201':
+          description: Cart created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v3/accounts/{accountId}/customers/{customerId}/carts/{cartId}:
+    get:
+      operationId: getCart
+      summary: Get Cart
+      description: Retrieve a specific shopping cart.
+      tags:
+        - Carts
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CartId'
+      responses:
+        '200':
+          description: Cart details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    put:
+      operationId: updateCart
+      summary: Update Cart
+      description: Update an existing shopping cart.
+      tags:
+        - Carts
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CartId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartRequest'
+      responses:
+        '200':
+          description: Cart updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v3/accounts/{accountId}/customers/{customerId}/carts/{cartId}/checkout:
+    post:
+      operationId: checkoutCart
+      summary: Checkout Cart
+      description: Process the shopping cart and create an order from its contents.
+      tags:
+        - Carts
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CartId'
+      responses:
+        '200':
+          description: Checkout successful, order created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v3/accounts/{accountId}/customers/{customerId}/carts/{cartId}/items:
+    get:
+      operationId: listCartItems
+      summary: List Cart Items
+      description: List all items in a shopping cart.
+      tags:
+        - Cart Items
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CartId'
+      responses:
+        '200':
+          description: List of cart items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CartItem'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: addCartItem
+      summary: Add Cart Item
+      description: Add a product item to the shopping cart.
+      tags:
+        - Cart Items
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CartId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartItemRequest'
+      responses:
+        '201':
+          description: Item added to cart
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartItem'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v3/accounts/{accountId}/customers/{customerId}/carts/{cartId}/items/{itemId}:
+    get:
+      operationId: getCartItem
+      summary: Get Cart Item
+      description: Retrieve details for a specific cart item.
+      tags:
+        - Cart Items
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CartId'
+        - $ref: '#/components/parameters/ItemId'
+      responses:
+        '200':
+          description: Cart item details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartItem'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    put:
+      operationId: updateCartItem
+      summary: Update Cart Item
+      description: Modify an existing item in the shopping cart (e.g., change quantity).
+      tags:
+        - Cart Items
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/CartId'
+        - $ref: '#/components/parameters/ItemId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartItemRequest'
+      responses:
+        '200':
+          description: Cart item updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartItem'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v3/accounts/{accountId}/customers/{customerId}/cloudProviders:
+    post:
+      operationId: createCloudProvider
+      summary: Create Cloud Provider
+      description: Register a cloud provider account for a customer.
+      tags:
+        - Cloud Providers
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/CustomerId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CloudProviderRequest'
+      responses:
+        '201':
+          description: Cloud provider registered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CloudProvider'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v3/accounts/{accountId}/customers/{customerId}/cloudProviders/{providerId}:
+    get:
+      operationId: getCloudProvider
+      summary: Get Cloud Provider
+      description: Retrieve details for a specific customer cloud provider account.
+      tags:
+        - Cloud Providers
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/CustomerId'
+        - name: providerId
+          in: path
+          required: true
+          description: Unique cloud provider identifier
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Cloud provider details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CloudProvider'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    put:
+      operationId: linkCloudProvider
+      summary: Link Cloud Provider
+      description: Link an existing cloud provider account to a customer.
+      tags:
+        - Cloud Providers
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/CustomerId'
+        - name: providerId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CloudProviderRequest'
+      responses:
+        '200':
+          description: Cloud provider linked
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CloudProvider'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v3/accounts/{accountId}/provisioningInfo:
+    get:
+      operationId: getProvisioningInfo
+      summary: Get Provisioning Info
+      description: >-
+        Get vendor-specific provisioning configuration templates. Use either the
+        vendor or templateId query parameter.
+      tags:
+        - Provisioning
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - name: vendor
+          in: query
+          description: Vendor name to retrieve provisioning templates for
+          schema:
+            type: string
+        - name: templateId
+          in: query
+          description: Specific provisioning template ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Provisioning templates
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProvisioningTemplate'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v3/accounts/{accountId}/reports:
+    get:
+      operationId: listReports
+      summary: List Reports
+      description: List all available business intelligence reports for the account.
+      tags:
+        - Reports
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+      responses:
+        '200':
+          description: List of available reports
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReportMetadata'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v3/accounts/{accountId}/reports/{reportId}/metadata:
+    get:
+      operationId: getReportMetadata
+      summary: Get Report Metadata
+      description: Retrieve structure and schema information for a specific report.
+      tags:
+        - Reports
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/ReportId'
+      responses:
+        '200':
+          description: Report metadata and structure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportMetadata'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v3/accounts/{accountId}/reports/{reportId}/data:
+    get:
+      operationId: getReportData
+      summary: Get Report Data
+      description: Access report data. Use format=csv query parameter to export as CSV.
+      tags:
+        - Reports
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/ReportId'
+        - name: format
+          in: query
+          description: Output format (omit for JSON, use 'csv' for CSV export)
+          schema:
+            type: string
+            enum:
+              - csv
+        - name: startDate
+          in: query
+          description: Report start date (YYYY-MM-DD)
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          description: Report end date (YYYY-MM-DD)
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Report data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportData'
+            text/csv:
+              schema:
+                type: string
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: TD SYNNEX StreamOne Ion uses OAuth 2.0 with refresh token flow
+      flows:
+        clientCredentials:
+          tokenUrl: https://ion.tdsynnex.com/oauth/token
+          scopes:
+            read: Read access to partner resources
+            write: Write access to create and update resources
+  parameters:
+    AccountId:
+      name: accountId
+      in: path
+      required: true
+      description: Partner account identifier
+      schema:
+        type: string
+    CustomerId:
+      name: customerId
+      in: path
+      required: true
+      description: End customer identifier
+      schema:
+        type: string
+    OrderId:
+      name: orderId
+      in: path
+      required: true
+      description: Order identifier
+      schema:
+        type: string
+    CartId:
+      name: cartId
+      in: path
+      required: true
+      description: Shopping cart identifier
+      schema:
+        type: string
+    ItemId:
+      name: itemId
+      in: path
+      required: true
+      description: Cart item identifier
+      schema:
+        type: string
+    ReportId:
+      name: reportId
+      in: path
+      required: true
+      description: Report identifier
+      schema:
+        type: string
+  responses:
+    BadRequest:
+      description: Bad Request - Invalid request parameters or body
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized - Valid OAuth 2.0 token required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Not Found - Requested resource does not exist
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: array
+          items:
+            type: string
+    TokenResponse:
+      type: object
+      description: OAuth 2.0 token response
+      properties:
+        access_token:
+          type: string
+          description: Bearer access token for API authentication
+        token_type:
+          type: string
+          example: Bearer
+        expires_in:
+          type: integer
+          description: Token expiration time in seconds
+    Customer:
+      type: object
+      description: An end customer account
+      properties:
+        customerId:
+          type: string
+          description: Unique customer identifier
+        companyName:
+          type: string
+          description: Customer's company name
+        email:
+          type: string
+          description: Primary contact email
+        phone:
+          type: string
+          description: Primary contact phone
+        address:
+          $ref: '#/components/schemas/Address'
+        status:
+          type: string
+          enum:
+            - ACTIVE
+            - INACTIVE
+            - SUSPENDED
+        createdDate:
+          type: string
+          format: date-time
+        modifiedDate:
+          type: string
+          format: date-time
+    CustomerRequest:
+      type: object
+      required:
+        - companyName
+        - email
+      properties:
+        companyName:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        address:
+          $ref: '#/components/schemas/Address'
+    Address:
+      type: object
+      properties:
+        street:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        postalCode:
+          type: string
+        country:
+          type: string
+    CloudProfile:
+      type: object
+      description: A customer's cloud provider account profile
+      properties:
+        profileId:
+          type: string
+        vendor:
+          type: string
+          example: Microsoft
+        tenantId:
+          type: string
+        status:
+          type: string
+    CloudProvider:
+      type: object
+      description: Cloud provider account linked to a customer
+      properties:
+        providerId:
+          type: string
+        vendor:
+          type: string
+        accountId:
+          type: string
+        status:
+          type: string
+        createdDate:
+          type: string
+          format: date-time
+    CloudProviderRequest:
+      type: object
+      required:
+        - vendor
+      properties:
+        vendor:
+          type: string
+          description: Cloud vendor name (e.g., Microsoft, AWS, Google)
+        accountId:
+          type: string
+          description: Cloud vendor account identifier
+    Product:
+      type: object
+      description: A technology product available for distribution
+      properties:
+        productId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        vendor:
+          type: string
+        category:
+          type: string
+        vertical:
+          type: string
+        sku:
+          type: string
+        pricing:
+          type: object
+          properties:
+            unitPrice:
+              type: number
+              format: double
+            currency:
+              type: string
+            billingFrequency:
+              type: string
+              enum:
+                - MONTHLY
+                - ANNUAL
+                - ONE_TIME
+        features:
+          type: array
+          items:
+            type: string
+        status:
+          type: string
+    Order:
+      type: object
+      description: A technology product order
+      properties:
+        orderId:
+          type: string
+        customerId:
+          type: string
+        status:
+          type: string
+          enum:
+            - PENDING
+            - PROCESSING
+            - COMPLETED
+            - CANCELLED
+            - FAILED
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+        totalAmount:
+          type: number
+          format: double
+        currency:
+          type: string
+        createdDate:
+          type: string
+          format: date-time
+        modifiedDate:
+          type: string
+          format: date-time
+    OrderItem:
+      type: object
+      properties:
+        productId:
+          type: string
+        quantity:
+          type: integer
+        unitPrice:
+          type: number
+          format: double
+        totalPrice:
+          type: number
+          format: double
+    OrderRequest:
+      type: object
+      required:
+        - customerId
+        - items
+      properties:
+        customerId:
+          type: string
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              productId:
+                type: string
+              quantity:
+                type: integer
+        notes:
+          type: string
+    Subscription:
+      type: object
+      description: A cloud software subscription
+      properties:
+        subscriptionId:
+          type: string
+        customerId:
+          type: string
+        productId:
+          type: string
+        productName:
+          type: string
+        vendor:
+          type: string
+        quantity:
+          type: integer
+        status:
+          type: string
+          enum:
+            - ACTIVE
+            - SUSPENDED
+            - CANCELLED
+            - EXPIRED
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        renewalDate:
+          type: string
+          format: date
+        autoRenew:
+          type: boolean
+        monthlyAmount:
+          type: number
+          format: double
+        currency:
+          type: string
+    Cart:
+      type: object
+      description: A shopping cart for order preparation
+      properties:
+        cartId:
+          type: string
+        customerId:
+          type: string
+        status:
+          type: string
+          enum:
+            - OPEN
+            - CHECKED_OUT
+            - ABANDONED
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CartItem'
+        totalAmount:
+          type: number
+          format: double
+        createdDate:
+          type: string
+          format: date-time
+    CartRequest:
+      type: object
+      properties:
+        notes:
+          type: string
+    CartItem:
+      type: object
+      properties:
+        itemId:
+          type: string
+        productId:
+          type: string
+        productName:
+          type: string
+        quantity:
+          type: integer
+        unitPrice:
+          type: number
+          format: double
+        totalPrice:
+          type: number
+          format: double
+    CartItemRequest:
+      type: object
+      required:
+        - productId
+        - quantity
+      properties:
+        productId:
+          type: string
+        quantity:
+          type: integer
+    ProvisioningTemplate:
+      type: object
+      description: A vendor-specific provisioning configuration template
+      properties:
+        templateId:
+          type: string
+        vendor:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        fields:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              type:
+                type: string
+              required:
+                type: boolean
+              description:
+                type: string
+    ReportMetadata:
+      type: object
+      description: Report structure and metadata
+      properties:
+        reportId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        columns:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              type:
+                type: string
+              description:
+                type: string
+        filters:
+          type: array
+          items:
+            type: string
+    ReportData:
+      type: object
+      description: Business intelligence report data
+      properties:
+        reportId:
+          type: string
+        generatedAt:
+          type: string
+          format: date-time
+        totalRows:
+          type: integer
+        data:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
