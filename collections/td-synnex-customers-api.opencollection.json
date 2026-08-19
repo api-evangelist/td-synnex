@@ -1,0 +1,162 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TD SYNNEX StreamOne Ion Partner Authentication Customers API",
+    "version": "3"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "client_credentials",
+      "accessTokenUrl": "https://ion.tdsynnex.com/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Customers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Customers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ion.tdsynnex.com/v3/accounts/:accountId/customers",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Partner account identifier"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number for pagination"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per page"
+              }
+            ]
+          },
+          "docs": "List all end customers associated with the partner account."
+        },
+        {
+          "info": {
+            "name": "Create Customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ion.tdsynnex.com/v3/accounts/:accountId/customers",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Partner account identifier"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a new end customer to the platform."
+        },
+        {
+          "info": {
+            "name": "Get Customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ion.tdsynnex.com/v3/accounts/:accountId/customers/:customerId",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Partner account identifier"
+              },
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "End customer identifier"
+              }
+            ]
+          },
+          "docs": "Retrieve details for a specific end customer."
+        },
+        {
+          "info": {
+            "name": "Update Customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://ion.tdsynnex.com/v3/accounts/:accountId/customers/:customerId",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Partner account identifier"
+              },
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "End customer identifier"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Modify an existing end customer's information."
+        },
+        {
+          "info": {
+            "name": "Get Customer Cloud Profiles",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ion.tdsynnex.com/v3/accounts/:accountId/customers/:customerId/cloudProfiles",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Partner account identifier"
+              },
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "End customer identifier"
+              }
+            ]
+          },
+          "docs": "Fetch linked cloud provider profile details for a specific customer."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

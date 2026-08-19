@@ -1,0 +1,191 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TD SYNNEX StreamOne Ion Partner Authentication Orders API",
+    "version": "3"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "client_credentials",
+      "accessTokenUrl": "https://ion.tdsynnex.com/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Orders",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Orders",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ion.tdsynnex.com/v3/accounts/:accountId/orders",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Partner account identifier"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by order status"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Retrieve all orders associated with the partner account."
+        },
+        {
+          "info": {
+            "name": "Create Order",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ion.tdsynnex.com/v3/accounts/:accountId/orders",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Partner account identifier"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new technology product order."
+        },
+        {
+          "info": {
+            "name": "List Customer Orders",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ion.tdsynnex.com/v3/accounts/:accountId/customers/:customerId/orders",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Partner account identifier"
+              },
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "End customer identifier"
+              }
+            ]
+          },
+          "docs": "Fetch all orders for a specific customer."
+        },
+        {
+          "info": {
+            "name": "Get Order",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ion.tdsynnex.com/v3/accounts/:accountId/orders/:orderId",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Partner account identifier"
+              },
+              {
+                "name": "orderId",
+                "value": "",
+                "type": "path",
+                "description": "Order identifier"
+              }
+            ]
+          },
+          "docs": "Retrieve details for a specific order."
+        },
+        {
+          "info": {
+            "name": "Update Order",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://ion.tdsynnex.com/v3/accounts/:accountId/orders/:orderId",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Partner account identifier"
+              },
+              {
+                "name": "orderId",
+                "value": "",
+                "type": "path",
+                "description": "Order identifier"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Modify an existing order (e.g., update license counts, renewal settings)."
+        },
+        {
+          "info": {
+            "name": "Cancel Order",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://ion.tdsynnex.com/v3/accounts/:accountId/orders/:orderId",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Partner account identifier"
+              },
+              {
+                "name": "orderId",
+                "value": "",
+                "type": "path",
+                "description": "Order identifier"
+              }
+            ]
+          },
+          "docs": "Cancel a pending order."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

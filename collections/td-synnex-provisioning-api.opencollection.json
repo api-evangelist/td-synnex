@@ -1,0 +1,60 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TD SYNNEX StreamOne Ion Partner Authentication Provisioning API",
+    "version": "3"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "client_credentials",
+      "accessTokenUrl": "https://ion.tdsynnex.com/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Provisioning",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Provisioning Info",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ion.tdsynnex.com/v3/accounts/:accountId/provisioningInfo",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Partner account identifier"
+              },
+              {
+                "name": "vendor",
+                "value": "",
+                "type": "query",
+                "description": "Vendor name to retrieve provisioning templates for"
+              },
+              {
+                "name": "templateId",
+                "value": "",
+                "type": "query",
+                "description": "Specific provisioning template ID"
+              }
+            ]
+          },
+          "docs": "Get vendor-specific provisioning configuration templates. Use either the vendor or templateId query parameter."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

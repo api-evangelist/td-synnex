@@ -1,0 +1,133 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TD SYNNEX StreamOne Ion Partner Authentication Products API",
+    "version": "3"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "client_credentials",
+      "accessTokenUrl": "https://ion.tdsynnex.com/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Products",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Products",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ion.tdsynnex.com/v3/accounts/:accountId/products",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Partner account identifier"
+              },
+              {
+                "name": "vendor",
+                "value": "",
+                "type": "query",
+                "description": "Filter by vendor name"
+              },
+              {
+                "name": "category",
+                "value": "",
+                "type": "query",
+                "description": "Filter by product category"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Retrieve the list of technology products available through TD SYNNEX."
+        },
+        {
+          "info": {
+            "name": "Get Product",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ion.tdsynnex.com/v3/accounts/:accountId/products/:productId",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Partner account identifier"
+              },
+              {
+                "name": "productId",
+                "value": "",
+                "type": "path",
+                "description": "Unique product identifier"
+              }
+            ]
+          },
+          "docs": "Access detailed information for a specific technology product."
+        },
+        {
+          "info": {
+            "name": "List Product Verticals",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ion.tdsynnex.com/v3/accounts/:accountId/products/verticals",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Partner account identifier"
+              }
+            ]
+          },
+          "docs": "List product verticals (industry/market segments) available in the catalog."
+        },
+        {
+          "info": {
+            "name": "List Product Categories",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://ion.tdsynnex.com/v3/accounts/:accountId/products/categories",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Partner account identifier"
+              }
+            ]
+          },
+          "docs": "List product categories available in the catalog."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

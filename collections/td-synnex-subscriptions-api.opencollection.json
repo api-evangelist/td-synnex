@@ -1,0 +1,97 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TD SYNNEX StreamOne Ion Partner Authentication Subscriptions API",
+    "version": "3"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "client_credentials",
+      "accessTokenUrl": "https://ion.tdsynnex.com/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Subscriptions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Customer Subscriptions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ion.tdsynnex.com/v3/accounts/:accountId/customers/:customerId/subscriptions",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Partner account identifier"
+              },
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "End customer identifier"
+              },
+              {
+                "name": "vendor",
+                "value": "",
+                "type": "query",
+                "description": "Filter subscriptions by vendor"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by subscription status"
+              }
+            ]
+          },
+          "docs": "List all cloud software subscriptions for a specific customer."
+        },
+        {
+          "info": {
+            "name": "Get Subscription",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ion.tdsynnex.com/v3/accounts/:accountId/customers/:customerId/subscriptions/:subscriptionId",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Partner account identifier"
+              },
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "End customer identifier"
+              },
+              {
+                "name": "subscriptionId",
+                "value": "",
+                "type": "path",
+                "description": "Unique subscription identifier"
+              }
+            ]
+          },
+          "docs": "Retrieve details for a specific customer subscription."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

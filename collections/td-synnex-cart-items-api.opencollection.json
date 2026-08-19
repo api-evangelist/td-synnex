@@ -1,0 +1,173 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TD SYNNEX StreamOne Ion Partner Authentication Cart Items API",
+    "version": "3"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "client_credentials",
+      "accessTokenUrl": "https://ion.tdsynnex.com/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Cart Items",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Cart Items",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ion.tdsynnex.com/v3/accounts/:accountId/customers/:customerId/carts/:cartId/items",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Partner account identifier"
+              },
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "End customer identifier"
+              },
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "Shopping cart identifier"
+              }
+            ]
+          },
+          "docs": "List all items in a shopping cart."
+        },
+        {
+          "info": {
+            "name": "Add Cart Item",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ion.tdsynnex.com/v3/accounts/:accountId/customers/:customerId/carts/:cartId/items",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Partner account identifier"
+              },
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "End customer identifier"
+              },
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "Shopping cart identifier"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a product item to the shopping cart."
+        },
+        {
+          "info": {
+            "name": "Get Cart Item",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ion.tdsynnex.com/v3/accounts/:accountId/customers/:customerId/carts/:cartId/items/:itemId",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Partner account identifier"
+              },
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "End customer identifier"
+              },
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "Shopping cart identifier"
+              },
+              {
+                "name": "itemId",
+                "value": "",
+                "type": "path",
+                "description": "Cart item identifier"
+              }
+            ]
+          },
+          "docs": "Retrieve details for a specific cart item."
+        },
+        {
+          "info": {
+            "name": "Update Cart Item",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://ion.tdsynnex.com/v3/accounts/:accountId/customers/:customerId/carts/:cartId/items/:itemId",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Partner account identifier"
+              },
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "End customer identifier"
+              },
+              {
+                "name": "cartId",
+                "value": "",
+                "type": "path",
+                "description": "Shopping cart identifier"
+              },
+              {
+                "name": "itemId",
+                "value": "",
+                "type": "path",
+                "description": "Cart item identifier"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Modify an existing item in the shopping cart (e.g., change quantity)."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,123 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TD SYNNEX StreamOne Ion Partner Authentication Cloud Providers API",
+    "version": "3"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "client_credentials",
+      "accessTokenUrl": "https://ion.tdsynnex.com/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Cloud Providers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create Cloud Provider",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ion.tdsynnex.com/v3/accounts/:accountId/customers/:customerId/cloudProviders",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Partner account identifier"
+              },
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "End customer identifier"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Register a cloud provider account for a customer."
+        },
+        {
+          "info": {
+            "name": "Get Cloud Provider",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ion.tdsynnex.com/v3/accounts/:accountId/customers/:customerId/cloudProviders/:providerId",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Partner account identifier"
+              },
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "End customer identifier"
+              },
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique cloud provider identifier"
+              }
+            ]
+          },
+          "docs": "Retrieve details for a specific customer cloud provider account."
+        },
+        {
+          "info": {
+            "name": "Link Cloud Provider",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://ion.tdsynnex.com/v3/accounts/:accountId/customers/:customerId/cloudProviders/:providerId",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "Partner account identifier"
+              },
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "End customer identifier"
+              },
+              {
+                "name": "providerId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Link an existing cloud provider account to a customer."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
