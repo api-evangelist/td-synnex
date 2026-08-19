@@ -34,7 +34,7 @@ tags:
 created: '2026-03-24'
 modified: '2026-05-19'
 url: https://raw.githubusercontent.com/api-evangelist/td-synnex/refs/heads/main/apis.yml
-specificationVersion: '0.19'
+specificationVersion: '0.23'
 apis:
 - aid: td-synnex:td-synnex-authentication-api
   name: TD SYNNEX Authentication API
