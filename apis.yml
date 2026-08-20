@@ -66,6 +66,8 @@ apis:
   humanURL: https://docs.streamone.cloud/
   baseURL: https://ion.tdsynnex.com
   tags:
+  - Cart
+  tags_raw:
   - Carts
   properties:
   - type: OpenAPI
@@ -102,6 +104,8 @@ apis:
   humanURL: https://docs.streamone.cloud/
   baseURL: https://ion.tdsynnex.com
   tags:
+  - Order
+  tags_raw:
   - Orders
   properties:
   - type: OpenAPI
@@ -114,6 +118,8 @@ apis:
   humanURL: https://docs.streamone.cloud/
   baseURL: https://ion.tdsynnex.com
   tags:
+  - Product
+  tags_raw:
   - Products
   properties:
   - type: OpenAPI
@@ -150,6 +156,8 @@ apis:
   humanURL: https://docs.streamone.cloud/
   baseURL: https://ion.tdsynnex.com
   tags:
+  - Subscription
+  tags_raw:
   - Subscriptions
   properties:
   - type: OpenAPI
