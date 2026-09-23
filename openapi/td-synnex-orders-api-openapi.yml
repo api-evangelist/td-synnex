@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: TD SYNNEX StreamOne Ion Partner Authentication Orders API
+  title: TD SYNNEX StreamOne Ion Partner Orders API
   description: The StreamOne Ion Partner API provides partners with programmatic access to TD SYNNEX cloud distribution services. Partners can manage end customers, browse product catalogs, create and manage orders, track subscriptions, manage shopping carts, and access business intelligence reports through a unified REST interface supporting multiple cloud vendors. The API enables MSPs, resellers, and technology partners to automate their cloud distribution workflows.
   version: '3'
   contact:
@@ -161,7 +161,42 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  parameters:
+    OrderId:
+      name: orderId
+      in: path
+      required: true
+      description: Order identifier
+      schema:
+        type: string
+    CustomerId:
+      name: customerId
+      in: path
+      required: true
+      description: End customer identifier
+      schema:
+        type: string
+    AccountId:
+      name: accountId
+      in: path
+      required: true
+      description: Partner account identifier
+      schema:
+        type: string
   schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: array
+          items:
+            type: string
     Order:
       type: object
       description: A technology product order
@@ -193,19 +228,19 @@ components:
         modifiedDate:
           type: string
           format: date-time
-    Error:
+    OrderItem:
       type: object
       properties:
-        code:
+        productId:
           type: string
-          description: Error code
-        message:
-          type: string
-          description: Human-readable error message
-        details:
-          type: array
-          items:
-            type: string
+        quantity:
+          type: integer
+        unitPrice:
+          type: number
+          format: double
+        totalPrice:
+          type: number
+          format: double
     OrderRequest:
       type: object
       required:
@@ -225,28 +260,15 @@ components:
                 type: integer
         notes:
           type: string
-    OrderItem:
-      type: object
-      properties:
-        productId:
-          type: string
-        quantity:
-          type: integer
-        unitPrice:
-          type: number
-          format: double
-        totalPrice:
-          type: number
-          format: double
   responses:
-    NotFound:
-      description: Not Found - Requested resource does not exist
+    BadRequest:
+      description: Bad Request - Invalid request parameters or body
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Bad Request - Invalid request parameters or body
+    NotFound:
+      description: Not Found - Requested resource does not exist
       content:
         application/json:
           schema:
@@ -257,28 +279,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-  parameters:
-    CustomerId:
-      name: customerId
-      in: path
-      required: true
-      description: End customer identifier
-      schema:
-        type: string
-    AccountId:
-      name: accountId
-      in: path
-      required: true
-      description: Partner account identifier
-      schema:
-        type: string
-    OrderId:
-      name: orderId
-      in: path
-      required: true
-      description: Order identifier
-      schema:
-        type: string
   securitySchemes:
     OAuth2:
       type: oauth2

@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: TD SYNNEX StreamOne Ion Partner Authentication Provisioning API
+  title: TD SYNNEX StreamOne Ion Partner Provisioning API
   description: The StreamOne Ion Partner API provides partners with programmatic access to TD SYNNEX cloud distribution services. Partners can manage end customers, browse product catalogs, create and manage orders, track subscriptions, manage shopping carts, and access business intelligence reports through a unified REST interface supporting multiple cloud vendors. The API enables MSPs, resellers, and technology partners to automate their cloud distribution workflows.
   version: '3'
   contact:
@@ -46,6 +46,13 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
+  responses:
+    Unauthorized:
+      description: Unauthorized - Valid OAuth 2.0 token required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
     ProvisioningTemplate:
       type: object
@@ -85,13 +92,6 @@ components:
           type: array
           items:
             type: string
-  responses:
-    Unauthorized:
-      description: Unauthorized - Valid OAuth 2.0 token required
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   parameters:
     AccountId:
       name: accountId
