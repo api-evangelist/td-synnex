@@ -125,6 +125,14 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
+  parameters:
+    AccountId:
+      name: accountId
+      in: path
+      required: true
+      description: Partner account identifier
+      schema:
+        type: string
   schemas:
     Error:
       type: object
@@ -177,23 +185,15 @@ components:
             type: string
         status:
           type: string
-  parameters:
-    AccountId:
-      name: accountId
-      in: path
-      required: true
-      description: Partner account identifier
-      schema:
-        type: string
   responses:
-    NotFound:
-      description: Not Found - Requested resource does not exist
+    Unauthorized:
+      description: Unauthorized - Valid OAuth 2.0 token required
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Unauthorized - Valid OAuth 2.0 token required
+    NotFound:
+      description: Not Found - Requested resource does not exist
       content:
         application/json:
           schema:

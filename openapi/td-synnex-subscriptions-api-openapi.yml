@@ -74,20 +74,22 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  parameters:
+    CustomerId:
+      name: customerId
+      in: path
+      required: true
+      description: End customer identifier
+      schema:
+        type: string
+    AccountId:
+      name: accountId
+      in: path
+      required: true
+      description: Partner account identifier
+      schema:
+        type: string
   schemas:
-    Error:
-      type: object
-      properties:
-        code:
-          type: string
-          description: Error code
-        message:
-          type: string
-          description: Human-readable error message
-        details:
-          type: array
-          items:
-            type: string
     Subscription:
       type: object
       description: A cloud software subscription
@@ -127,30 +129,28 @@ components:
           format: double
         currency:
           type: string
-  parameters:
-    CustomerId:
-      name: customerId
-      in: path
-      required: true
-      description: End customer identifier
-      schema:
-        type: string
-    AccountId:
-      name: accountId
-      in: path
-      required: true
-      description: Partner account identifier
-      schema:
-        type: string
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: array
+          items:
+            type: string
   responses:
-    NotFound:
-      description: Not Found - Requested resource does not exist
+    Unauthorized:
+      description: Unauthorized - Valid OAuth 2.0 token required
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Unauthorized - Valid OAuth 2.0 token required
+    NotFound:
+      description: Not Found - Requested resource does not exist
       content:
         application/json:
           schema:

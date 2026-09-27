@@ -110,6 +110,35 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
+  parameters:
+    CustomerId:
+      name: customerId
+      in: path
+      required: true
+      description: End customer identifier
+      schema:
+        type: string
+    AccountId:
+      name: accountId
+      in: path
+      required: true
+      description: Partner account identifier
+      schema:
+        type: string
+    CartId:
+      name: cartId
+      in: path
+      required: true
+      description: Shopping cart identifier
+      schema:
+        type: string
+    ItemId:
+      name: itemId
+      in: path
+      required: true
+      description: Cart item identifier
+      schema:
+        type: string
   schemas:
     Error:
       type: object
@@ -151,35 +180,6 @@ components:
         totalPrice:
           type: number
           format: double
-  parameters:
-    CartId:
-      name: cartId
-      in: path
-      required: true
-      description: Shopping cart identifier
-      schema:
-        type: string
-    CustomerId:
-      name: customerId
-      in: path
-      required: true
-      description: End customer identifier
-      schema:
-        type: string
-    AccountId:
-      name: accountId
-      in: path
-      required: true
-      description: Partner account identifier
-      schema:
-        type: string
-    ItemId:
-      name: itemId
-      in: path
-      required: true
-      description: Cart item identifier
-      schema:
-        type: string
   responses:
     Unauthorized:
       description: Unauthorized - Valid OAuth 2.0 token required
