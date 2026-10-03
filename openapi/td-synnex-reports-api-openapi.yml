@@ -137,19 +137,6 @@ components:
           type: array
           items:
             type: string
-    Error:
-      type: object
-      properties:
-        code:
-          type: string
-          description: Error code
-        message:
-          type: string
-          description: Human-readable error message
-        details:
-          type: array
-          items:
-            type: string
     ReportData:
       type: object
       description: Business intelligence report data
@@ -166,6 +153,19 @@ components:
           items:
             type: object
             additionalProperties: true
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: array
+          items:
+            type: string
   responses:
     Unauthorized:
       description: Unauthorized - Valid OAuth 2.0 token required

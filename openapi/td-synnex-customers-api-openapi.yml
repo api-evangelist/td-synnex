@@ -147,6 +147,25 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
+  responses:
+    BadRequest:
+      description: Bad Request - Invalid request parameters or body
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Not Found - Requested resource does not exist
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized - Valid OAuth 2.0 token required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   parameters:
     CustomerId:
       name: customerId
@@ -163,46 +182,19 @@ components:
       schema:
         type: string
   schemas:
-    Address:
+    CloudProfile:
       type: object
+      description: A customer's cloud provider account profile
       properties:
-        street:
+        profileId:
           type: string
-        city:
+        vendor:
           type: string
-        state:
+          example: Microsoft
+        tenantId:
           type: string
-        postalCode:
+        status:
           type: string
-        country:
-          type: string
-    CustomerRequest:
-      type: object
-      required:
-      - companyName
-      - email
-      properties:
-        companyName:
-          type: string
-        email:
-          type: string
-        phone:
-          type: string
-        address:
-          $ref: '#/components/schemas/Address'
-    Error:
-      type: object
-      properties:
-        code:
-          type: string
-          description: Error code
-        message:
-          type: string
-          description: Human-readable error message
-        details:
-          type: array
-          items:
-            type: string
     Customer:
       type: object
       description: An end customer account
@@ -233,38 +225,46 @@ components:
         modifiedDate:
           type: string
           format: date-time
-    CloudProfile:
+    Error:
       type: object
-      description: A customer's cloud provider account profile
       properties:
-        profileId:
+        code:
           type: string
-        vendor:
+          description: Error code
+        message:
           type: string
-          example: Microsoft
-        tenantId:
+          description: Human-readable error message
+        details:
+          type: array
+          items:
+            type: string
+    CustomerRequest:
+      type: object
+      required:
+      - companyName
+      - email
+      properties:
+        companyName:
           type: string
-        status:
+        email:
           type: string
-  responses:
-    Unauthorized:
-      description: Unauthorized - Valid OAuth 2.0 token required
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Bad Request - Invalid request parameters or body
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Not Found - Requested resource does not exist
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+        phone:
+          type: string
+        address:
+          $ref: '#/components/schemas/Address'
+    Address:
+      type: object
+      properties:
+        street:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        postalCode:
+          type: string
+        country:
+          type: string
   securitySchemes:
     OAuth2:
       type: oauth2

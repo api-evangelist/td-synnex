@@ -128,49 +128,20 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
+  responses:
+    BadRequest:
+      description: Bad Request - Invalid request parameters or body
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized - Valid OAuth 2.0 token required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    Cart:
-      type: object
-      description: A shopping cart for order preparation
-      properties:
-        cartId:
-          type: string
-        customerId:
-          type: string
-        status:
-          type: string
-          enum:
-          - OPEN
-          - CHECKED_OUT
-          - ABANDONED
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/CartItem'
-        totalAmount:
-          type: number
-          format: double
-        createdDate:
-          type: string
-          format: date-time
-    CartRequest:
-      type: object
-      properties:
-        notes:
-          type: string
-    Error:
-      type: object
-      properties:
-        code:
-          type: string
-          description: Error code
-        message:
-          type: string
-          description: Human-readable error message
-        details:
-          type: array
-          items:
-            type: string
     OrderItem:
       type: object
       properties:
@@ -184,6 +155,41 @@ components:
         totalPrice:
           type: number
           format: double
+    CartRequest:
+      type: object
+      properties:
+        notes:
+          type: string
+    CartItem:
+      type: object
+      properties:
+        itemId:
+          type: string
+        productId:
+          type: string
+        productName:
+          type: string
+        quantity:
+          type: integer
+        unitPrice:
+          type: number
+          format: double
+        totalPrice:
+          type: number
+          format: double
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: array
+          items:
+            type: string
     Order:
       type: object
       description: A technology product order
@@ -215,36 +221,43 @@ components:
         modifiedDate:
           type: string
           format: date-time
-    CartItem:
+    Cart:
       type: object
+      description: A shopping cart for order preparation
       properties:
-        itemId:
+        cartId:
           type: string
-        productId:
+        customerId:
           type: string
-        productName:
+        status:
           type: string
-        quantity:
-          type: integer
-        unitPrice:
+          enum:
+          - OPEN
+          - CHECKED_OUT
+          - ABANDONED
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CartItem'
+        totalAmount:
           type: number
           format: double
-        totalPrice:
-          type: number
-          format: double
+        createdDate:
+          type: string
+          format: date-time
   parameters:
-    AccountId:
-      name: accountId
-      in: path
-      required: true
-      description: Partner account identifier
-      schema:
-        type: string
     CustomerId:
       name: customerId
       in: path
       required: true
       description: End customer identifier
+      schema:
+        type: string
+    AccountId:
+      name: accountId
+      in: path
+      required: true
+      description: Partner account identifier
       schema:
         type: string
     CartId:
@@ -254,19 +267,6 @@ components:
       description: Shopping cart identifier
       schema:
         type: string
-  responses:
-    Unauthorized:
-      description: Unauthorized - Valid OAuth 2.0 token required
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Bad Request - Invalid request parameters or body
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   securitySchemes:
     OAuth2:
       type: oauth2
