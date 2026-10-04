@@ -67,19 +67,6 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
-    TokenResponse:
-      type: object
-      description: OAuth 2.0 token response
-      properties:
-        access_token:
-          type: string
-          description: Bearer access token for API authentication
-        token_type:
-          type: string
-          example: Bearer
-        expires_in:
-          type: integer
-          description: Token expiration time in seconds
     Error:
       type: object
       properties:
@@ -93,6 +80,19 @@ components:
           type: array
           items:
             type: string
+    TokenResponse:
+      type: object
+      description: OAuth 2.0 token response
+      properties:
+        access_token:
+          type: string
+          description: Bearer access token for API authentication
+        token_type:
+          type: string
+          example: Bearer
+        expires_in:
+          type: integer
+          description: Token expiration time in seconds
   securitySchemes:
     OAuth2:
       type: oauth2

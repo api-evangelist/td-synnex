@@ -96,22 +96,36 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
-  parameters:
-    AccountId:
-      name: accountId
-      in: path
-      required: true
-      description: Partner account identifier
-      schema:
-        type: string
-    ReportId:
-      name: reportId
-      in: path
-      required: true
-      description: Report identifier
-      schema:
-        type: string
   schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: array
+          items:
+            type: string
+    ReportData:
+      type: object
+      description: Business intelligence report data
+      properties:
+        reportId:
+          type: string
+        generatedAt:
+          type: string
+          format: date-time
+        totalRows:
+          type: integer
+        data:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
     ReportMetadata:
       type: object
       description: Report structure and metadata
@@ -137,35 +151,21 @@ components:
           type: array
           items:
             type: string
-    ReportData:
-      type: object
-      description: Business intelligence report data
-      properties:
-        reportId:
-          type: string
-        generatedAt:
-          type: string
-          format: date-time
-        totalRows:
-          type: integer
-        data:
-          type: array
-          items:
-            type: object
-            additionalProperties: true
-    Error:
-      type: object
-      properties:
-        code:
-          type: string
-          description: Error code
-        message:
-          type: string
-          description: Human-readable error message
-        details:
-          type: array
-          items:
-            type: string
+  parameters:
+    AccountId:
+      name: accountId
+      in: path
+      required: true
+      description: Partner account identifier
+      schema:
+        type: string
+    ReportId:
+      name: reportId
+      in: path
+      required: true
+      description: Report identifier
+      schema:
+        type: string
   responses:
     Unauthorized:
       description: Unauthorized - Valid OAuth 2.0 token required

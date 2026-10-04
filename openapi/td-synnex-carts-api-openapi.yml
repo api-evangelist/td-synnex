@@ -128,55 +128,29 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
-  responses:
-    BadRequest:
-      description: Bad Request - Invalid request parameters or body
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Unauthorized - Valid OAuth 2.0 token required
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+  parameters:
+    CartId:
+      name: cartId
+      in: path
+      required: true
+      description: Shopping cart identifier
+      schema:
+        type: string
+    AccountId:
+      name: accountId
+      in: path
+      required: true
+      description: Partner account identifier
+      schema:
+        type: string
+    CustomerId:
+      name: customerId
+      in: path
+      required: true
+      description: End customer identifier
+      schema:
+        type: string
   schemas:
-    OrderItem:
-      type: object
-      properties:
-        productId:
-          type: string
-        quantity:
-          type: integer
-        unitPrice:
-          type: number
-          format: double
-        totalPrice:
-          type: number
-          format: double
-    CartRequest:
-      type: object
-      properties:
-        notes:
-          type: string
-    CartItem:
-      type: object
-      properties:
-        itemId:
-          type: string
-        productId:
-          type: string
-        productName:
-          type: string
-        quantity:
-          type: integer
-        unitPrice:
-          type: number
-          format: double
-        totalPrice:
-          type: number
-          format: double
     Error:
       type: object
       properties:
@@ -190,6 +164,19 @@ components:
           type: array
           items:
             type: string
+    OrderItem:
+      type: object
+      properties:
+        productId:
+          type: string
+        quantity:
+          type: integer
+        unitPrice:
+          type: number
+          format: double
+        totalPrice:
+          type: number
+          format: double
     Order:
       type: object
       description: A technology product order
@@ -221,6 +208,28 @@ components:
         modifiedDate:
           type: string
           format: date-time
+    CartRequest:
+      type: object
+      properties:
+        notes:
+          type: string
+    CartItem:
+      type: object
+      properties:
+        itemId:
+          type: string
+        productId:
+          type: string
+        productName:
+          type: string
+        quantity:
+          type: integer
+        unitPrice:
+          type: number
+          format: double
+        totalPrice:
+          type: number
+          format: double
     Cart:
       type: object
       description: A shopping cart for order preparation
@@ -245,28 +254,19 @@ components:
         createdDate:
           type: string
           format: date-time
-  parameters:
-    CustomerId:
-      name: customerId
-      in: path
-      required: true
-      description: End customer identifier
-      schema:
-        type: string
-    AccountId:
-      name: accountId
-      in: path
-      required: true
-      description: Partner account identifier
-      schema:
-        type: string
-    CartId:
-      name: cartId
-      in: path
-      required: true
-      description: Shopping cart identifier
-      schema:
-        type: string
+  responses:
+    BadRequest:
+      description: Bad Request - Invalid request parameters or body
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized - Valid OAuth 2.0 token required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     OAuth2:
       type: oauth2

@@ -111,6 +111,20 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   parameters:
+    CartId:
+      name: cartId
+      in: path
+      required: true
+      description: Shopping cart identifier
+      schema:
+        type: string
+    AccountId:
+      name: accountId
+      in: path
+      required: true
+      description: Partner account identifier
+      schema:
+        type: string
     CustomerId:
       name: customerId
       in: path
@@ -125,21 +139,30 @@ components:
       description: Cart item identifier
       schema:
         type: string
-    AccountId:
-      name: accountId
-      in: path
-      required: true
-      description: Partner account identifier
-      schema:
-        type: string
-    CartId:
-      name: cartId
-      in: path
-      required: true
-      description: Shopping cart identifier
-      schema:
-        type: string
   schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: array
+          items:
+            type: string
+    CartItemRequest:
+      type: object
+      required:
+      - productId
+      - quantity
+      properties:
+        productId:
+          type: string
+        quantity:
+          type: integer
     CartItem:
       type: object
       properties:
@@ -157,29 +180,6 @@ components:
         totalPrice:
           type: number
           format: double
-    CartItemRequest:
-      type: object
-      required:
-      - productId
-      - quantity
-      properties:
-        productId:
-          type: string
-        quantity:
-          type: integer
-    Error:
-      type: object
-      properties:
-        code:
-          type: string
-          description: Error code
-        message:
-          type: string
-          description: Human-readable error message
-        details:
-          type: array
-          items:
-            type: string
   responses:
     Unauthorized:
       description: Unauthorized - Valid OAuth 2.0 token required
