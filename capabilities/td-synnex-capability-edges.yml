@@ -1,0 +1,44 @@
+slug: td-synnex
+provider: TD SYNNEX
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 3
+edges:
+- tag: Customers
+  spec_file: td-synnex-customers-api-openapi.yml
+  capability_id: BC-420.10
+  capability_id_l1: BC-420
+  capability_name: Customer Data Management
+  confidence: 0.8
+  evidence: 'POST /v3/accounts/{accountId}/customers  createCustomer  Create Customer (schemas: Customer,
+    CustomerRequest, Address)'
+  reason: CRUD over end-customer records with addresses and cloud profiles is customer master data maintenance
+    for the partner's account, i.e. Customer Data Management.
+- tag: Subscriptions
+  spec_file: td-synnex-subscriptions-api-openapi.yml
+  capability_id: BC-4240
+  capability_id_l1: BC-4240
+  capability_name: Subscription Lifecycle Management
+  confidence: 0.75
+  evidence: GET /v3/accounts/{accountId}/customers/{customerId}/subscriptions  listCustomerSubscriptions
+  reason: Read access to end-customer cloud subscriptions ("track subscriptions") clearly sits in subscription
+    lifecycle management; the read-only surface does not pinpoint a sub-capability.
+- tag: Reports
+  spec_file: td-synnex-reports-api-openapi.yml
+  capability_id: BC-610.50
+  capability_id_l1: BC-610
+  capability_name: Analytics & BI Management
+  confidence: 0.7
+  evidence: 'GET /v3/accounts/{accountId}/reports/{reportId}/data  getReportData; description: "access
+    business intelligence reports"'
+  reason: Generic report catalogue, metadata and data retrieval explicitly described as business intelligence
+    reporting, i.e. Analytics & BI delivery rather than a specific business domain.
